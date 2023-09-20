@@ -1,0 +1,22 @@
+version: "2.4"
+volumes:
+    postgresql-brin: {}
+services:
+    postgresql-brin:
+        image: postgres:14.3
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: brin
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+
+        volumes:
+            - postgresql-brin:/var/lib/postgresql/data:rw
+        ports:
+            - 3333:5432
+        healthcheck:
+            test: psql -w -U postgres -d brin -c "SELECT 1"
+            start_period: 300s
+            interval: 5s
+            timeout: 5s
+            retries: 3
